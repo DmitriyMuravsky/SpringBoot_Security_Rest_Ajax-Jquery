@@ -38,10 +38,16 @@ public class RoleDAOImpl implements RoleDAO {
     public Role getRoleByName(String name) {
         TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
         query.setParameter("name", name);
-        return (Role) query.getSingleResult();
+        return query.getSingleResult();
     }
 
     public List<Role> getAllRoles() {
         return entityManager.createQuery("SELECT r FROM Role r", Role.class).getResultList();
+    }
+
+    public Role getRoleById(int id) {
+        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.id = :id", Role.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 }

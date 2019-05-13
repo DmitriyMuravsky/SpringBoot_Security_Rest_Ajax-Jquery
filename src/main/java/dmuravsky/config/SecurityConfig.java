@@ -25,11 +25,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/auth/*").anonymous()
-                .antMatchers( "/user/*").hasAuthority("user")
+                .antMatchers( "/user/*").hasAnyAuthority("user", "admin")
                 .antMatchers("/admin/*").hasAuthority("admin")
                 .and().csrf().disable()
                 .formLogin()
-                .loginPage("/auth/signIn")
+                .loginPage("/")
                 .loginProcessingUrl("/auth/signIn/process").successHandler(authenticationHandler())
                 .usernameParameter("login")
                 .and().logout().logoutUrl("/logout").invalidateHttpSession(true).logoutSuccessUrl("/");

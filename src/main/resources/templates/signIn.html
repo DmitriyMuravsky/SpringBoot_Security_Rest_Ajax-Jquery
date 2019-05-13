@@ -2,16 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Sign In</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 </head>
 <body>
-    <form th:action="@{/auth/signIn/process}" method="post">
-        <input type="text" name="login" placeholder="login">
-        <input type="text" name="password" placeholder="password">
-        <input type="submit" value="Войти">
-    </form>
-    <a th:href="@{/auth/signUp}">
-        <input type="submit" value="Зарегистрироваться">
-    </a>
+    <div class="container-fluid bg-light">
+        <div class="row">
+            <div class="col-sm-5"></div>
+            <div class="col-sm-2 bg-light vh-100 mt-5">
+                <div class="h2 mt-4">Please sign in</div>
+                <form class="text-center" th:action="@{/auth/signIn/process}" method="post">
+                    <div class="form-group m-0">
+                        <input class="rounded w-100 p-2" type="text" name="login" placeholder="Login">
+                    </div>
+                    <div class="form-group mb-0">
+                        <input class="rounded w-100 p-2" type="text" name="password" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary mt-2 w-100 p-2 font-weight-bold">Sign in</button>
+                    </div>
+                </form>
+                <a th:href="@{/auth/signUp}">
+                    <button type="submit" class="btn btn-danger w-100 p-2 font-weight-bold mt-n2">Sign up</button>
+                </a>
+            </div>
+            <div class="col-sm-5"></div>
+        </div>
+    </div>
 </body>
 </html>

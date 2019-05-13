@@ -2,14 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Sign Up</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <form th:action="@{/auth/signUp}" th:object="${user}" method="post">
-        <input type="text" th:field="*{name}" placeholder="Name">
-        <input type="text" th:field="*{login}" placeholder="Login">
-        <input type="text" th:field="*{password}" placeholder="Password">
-        <input type="submit" value="Зарегистрироваться">
-    </form>
+<div class="container-fluid bg-light">
+    <div class="row">
+        <div class="col-sm-12 vh-100">
+            <form th:action="@{/auth/signUp}" th:object="${user}" method="post" class="border rounded bg-white text-center w-50 mx-auto mt-5">
+                <div class="h6 border rounded p-2 bg-light">Sign up</div>
+                <div class="form-group w-25 m-auto">
+                    <label class="font-weight-bold" for="InputName">Name</label>
+                    <input type="text" class="form-control mb-3" id="InputName" th:field="*{name}" placeholder="Name">
+                </div>
+                <div class="form-group w-25 m-auto p-auto">
+                    <label class="font-weight-bold" for="InputLogin">Login</label>
+                    <input type="text" class="form-control mb-3" id="InputLogin" th:field="*{login}" placeholder="Login">
+                </div>
+                <div class="form-group w-25 m-auto">
+                    <label class="font-weight-bold" for="InputPassword">Password</label>
+                    <input type="password" class="form-control mb-3" id="InputPassword" th:field="*{password}" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-success my-3">Confirm</button>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

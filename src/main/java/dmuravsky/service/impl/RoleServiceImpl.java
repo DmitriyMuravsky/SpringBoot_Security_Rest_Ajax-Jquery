@@ -30,6 +30,10 @@ public class RoleServiceImpl implements RoleService {
         return roleDAO.getRoleByName(name);
     }
 
+    public Role getRoleById(int id) {
+        return roleDAO.getRoleById(id);
+    }
+
     public List<Role> getAllRoles() {
         return roleDAO.getAllRoles();
     }

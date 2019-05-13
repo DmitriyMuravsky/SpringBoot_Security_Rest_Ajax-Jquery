@@ -6,10 +6,12 @@ import dmuravsky.model.User;
 import dmuravsky.service.RoleService;
 import dmuravsky.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,20 +27,19 @@ public class MainController {
 
     @RequestMapping("/")
     public String greeting() {
-        return "greeting";
+        return "signIn";
     }
 
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     public String users(Model model) {
         List<User> users = userService.getAllUsers();
+        List<Role> roles = roleService.getAllRoles();
         model.addAttribute("users", users);
+        User userActive = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("userActive", userActive);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("roles", roles);
         return "users";
-    }
-
-    @RequestMapping(value = "/admin/add", method = RequestMethod.GET)
-    public String add(Model model) {
-        model.addAttribute("user", new User());
-        return "add";
     }
 
     @PostMapping(value = "/admin/add")
@@ -50,33 +51,22 @@ public class MainController {
         return "redirect:/admin/users";
     }
 
-    @RequestMapping(value = "/admin/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable int id, Model model) {
-        User user = userService.getOneUserById(id);
-        model.addAttribute("user", user);
-        return "edit";
-    }
-
-    @PostMapping(value = "/admin/edit")
-    public String edit(@ModelAttribute User user, @RequestParam("id") int id, @RequestParam("role") String role) {
-        Set<Role> roles = new HashSet<Role>();
-        roles.add(roleService.getRoleByName(role));
-        user.setRoles(roles);
+    @PostMapping(value = "/admin/edit/{id}")
+    public String edit(@PathVariable("id") int id, @ModelAttribute User user, HttpServletRequest request) {
+        String[] selectedRoles = request.getParameterValues("selectedRoles");
+        Set<Role> roleSet = new HashSet<Role>();
+        for (String role : selectedRoles) {
+            roleSet.add(roleService.getRoleById(Integer.parseInt(role)));
+        }
         user.setId(id);
+        user.setRoles(roleSet);
         userService.updateUser(user);
         return "redirect:/admin/users";
     }
 
-    @RequestMapping(value = "/admin/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable int id, Model model) {
-        User user = userService.getOneUserById(id);
-        model.addAttribute("user", user);
-        return "delete";
-    }
-
-    @PostMapping(value = "/admin/delete")
-    public String delete(@ModelAttribute User user) {
-        userService.deleteUser(user);
+    @PostMapping(value = "/admin/delete/{id}")
+    public String delete(@PathVariable("id") int id) {
+        userService.deleteUser(userService.getOneUserById(id));
         return "redirect:/admin/users";
     }
 }

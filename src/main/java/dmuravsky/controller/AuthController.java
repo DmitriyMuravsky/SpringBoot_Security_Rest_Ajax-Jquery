@@ -22,12 +22,6 @@ public class AuthController {
     @Autowired
     RoleDAO roleDAO;
 
-    @RequestMapping(value = "/auth/signIn", method = RequestMethod.GET)
-    public String signIn() {
-        //model.addAttribute("user", new User());
-        return "signIn";
-    }
-
     @RequestMapping(value = "/user/accountInfo", method = RequestMethod.GET)
     public String accountInfo(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -49,6 +43,4 @@ public class AuthController {
         userService.addUser(user);
         return "redirect:/auth/signIn";
     }
-
-
 }
