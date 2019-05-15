@@ -1,6 +1,5 @@
 package dmuravsky.controller;
 
-import dmuravsky.dao.UserDAO;
 import dmuravsky.model.Role;
 import dmuravsky.model.User;
 import dmuravsky.service.RoleService;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,23 +41,13 @@ public class MainController {
     }
 
     @PostMapping(value = "/admin/add")
-    public String add(@ModelAttribute User user, @RequestParam("role") String role) {
-        Set<Role> roles = new HashSet<Role>();
-        roles.add(roleService.getRoleByName(role));
-        user.setRoles(roles);
+    public String add(@ModelAttribute User user) {
         userService.addUser(user);
         return "redirect:/admin/users";
     }
 
     @PostMapping(value = "/admin/edit/{id}")
-    public String edit(@PathVariable("id") int id, @ModelAttribute User user, HttpServletRequest request) {
-        String[] selectedRoles = request.getParameterValues("selectedRoles");
-        Set<Role> roleSet = new HashSet<Role>();
-        for (String role : selectedRoles) {
-            roleSet.add(roleService.getRoleById(Integer.parseInt(role)));
-        }
-        user.setId(id);
-        user.setRoles(roleSet);
+    public String edit(@PathVariable("id") int id, @ModelAttribute User user) {
         userService.updateUser(user);
         return "redirect:/admin/users";
     }

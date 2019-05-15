@@ -3,6 +3,7 @@ package dmuravsky.dao.impl;
 import dmuravsky.dao.RoleDAO;
 import dmuravsky.model.Role;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -11,7 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component
+@Repository
 @Transactional(readOnly = true)
 public class RoleDAOImpl implements RoleDAO {
 

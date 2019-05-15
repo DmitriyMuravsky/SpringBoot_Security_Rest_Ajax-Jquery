@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan("dmuravsky")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
