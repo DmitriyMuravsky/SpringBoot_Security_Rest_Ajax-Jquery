@@ -2,19 +2,19 @@ package dmuravsky.controller;
 
 import dmuravsky.model.Role;
 import dmuravsky.model.User;
+
 import dmuravsky.service.RoleService;
 import dmuravsky.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-@Controller
+@RestController
+@RequestMapping(value = "/rest", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MainController {
 
     @Autowired
@@ -23,38 +23,46 @@ public class MainController {
     @Autowired
     RoleService roleService;
 
-    @RequestMapping("/")
-    public String greeting() {
-        return "signIn";
-    }
-
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
-    public String users(Model model) {
-        List<User> users = userService.getAllUsers();
-        List<Role> roles = roleService.getAllRoles();
-        model.addAttribute("users", users);
-        User userActive = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("userActive", userActive);
-        model.addAttribute("newUser", new User());
-        model.addAttribute("roles", roles);
-        return "users";
+    public List<User> users() {
+        return userService.getAllUsers();
     }
 
-    @PostMapping(value = "/admin/add")
-    public String add(@ModelAttribute User user) {
+    @RequestMapping(value = "/admin/roles", method = RequestMethod.GET)
+    public List<Role> roles() {
+        return roleService.getAllRoles();
+    }
+
+    @RequestMapping(value = "/admin/user/{id}", method = RequestMethod.GET)
+    public User getUserById(@PathVariable("id") int id) {
+        return userService.getOneUserById(id);
+    }
+
+    @PostMapping(value = "/admin/user", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<User> add(@RequestBody User user) {
         userService.addUser(user);
-        return "redirect:/admin/users";
+        return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping(value = "/admin/edit/{id}")
-    public String edit(@PathVariable("id") int id, @ModelAttribute User user) {
+    @PutMapping(value = "/admin/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<User> edit(@PathVariable("id") int id, @RequestBody User user) {
+        user.setId(id);
         userService.updateUser(user);
-        return "redirect:/admin/users";
+        return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping(value = "/admin/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
+    @DeleteMapping(value = "/admin/user/{id}")
+    @ResponseBody
+    public ResponseEntity<User> delete(@PathVariable("id") int id) {
         userService.deleteUser(userService.getOneUserById(id));
-        return "redirect:/admin/users";
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/admin/account", method = RequestMethod.GET)
+    public User getInfo() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return user;
     }
 }

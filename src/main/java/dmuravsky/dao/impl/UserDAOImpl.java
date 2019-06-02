@@ -2,7 +2,6 @@ package dmuravsky.dao.impl;
 
 import dmuravsky.dao.UserDAO;
 import dmuravsky.model.User;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

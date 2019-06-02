@@ -34,7 +34,7 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
             }
         }
         if (isAdmin) {
-            return "/admin/users";
+            return "/admin/getUsers";
         } else if (isUser) {
             return "/user/accountInfo";
         } else {
